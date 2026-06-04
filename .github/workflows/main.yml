@@ -22,10 +22,16 @@ jobs:
           target: test
           load: true
 
+      - name: Debug tag
+        run: |
+            echo "${{ vars.DOCKER_USERNAME }}/${{ github.event.repository.name }}:${{ github.ref_name }}-${{ github.sha }}"
+
       - name: Build and push
         uses: docker/build-push-action@v7
         with:
           platforms: linux/amd64,linux/arm64
           push: true
           target: final
-          tags: ${{ vars.DOCKER_USERNAME }}/${{ github.event.repository.name }}:latest
+          tags: | 
+            ${{ vars.DOCKER_USERNAME }}/${{ github.event.repository.name }}:${{ github.ref_name }}-${{ github.sha }}
+            ${{ vars.DOCKER_USERNAME }}/${{ github.event.repository.name }}:latest
